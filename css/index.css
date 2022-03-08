@@ -1,0 +1,157 @@
+:root {
+    --purple: #6d28d9;
+    --whitey: #fcfcfc;
+    --black: #0e0d0d;
+    --slow-gray: #e0e0e0;
+    --red-alarm: rgb(221, 29, 29);
+    --green-checked: #078807;
+    --slow-blue: #ede9fe;
+    --slow-purple: rgb(173, 173, 231);
+}
+
+body {
+    background-color: var(--whitey);
+    color: var(--whitey);
+    font-family: iransans-light;
+    z-index: 1;
+}
+
+
+/* backGround shopCart */
+
+.back-drop {
+    display: none;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(97, 97, 97, 0.4);
+    z-index: 2;
+}
+
+
+/* header */
+
+header {
+    display: flex;
+    justify-content: space-around;
+    background-color: var(--slow-purple);
+    padding: 1rem 0.8rem;
+    padding-left: 2rem;
+    align-items: center;
+}
+
+.shop-cart {
+    cursor: pointer;
+}
+
+nav {
+    position: relative;
+}
+
+nav span {
+    bottom: 3px;
+}
+
+nav span,
+nav::after,
+nav::before {
+    content: "";
+    width: 25px;
+    height: 3px;
+    background-color: var(--whitey);
+    position: absolute;
+    border-radius: 10px;
+}
+
+nav::after {
+    top: 6px;
+}
+
+
+/* products */
+
+main {
+    background-color: var(--slow-blue);
+    color: var(--purple);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0.5rem;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+}
+
+main h3 {
+    padding-top: 1rem;
+}
+
+.products {
+    margin: 1rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.product-box {
+    display: grid;
+    grid-template-rows: 4fr 1fr 1fr;
+    background-color: var(--whitey);
+    border-radius: 8px;
+    max-width: 300px;
+}
+
+.product-box img {
+    border-radius: 8px;
+    max-width: 100%;
+}
+
+.description {
+    padding: 0.2rem 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem;
+    font: 0.8rem iransans-light;
+}
+
+.button-shop {
+    display: grid;
+    justify-self: center;
+    align-self: center;
+    padding: 0.8rem;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    background-color: var(--slow-blue);
+    border-radius: 8px;
+    color: var(--purple);
+    margin: 0 0.2rem;
+}
+
+
+/* box-shop-cart */
+
+.box-shop-cart {
+    visibility: flex;
+    display: none;
+    position: absolute;
+    border: 1px solid var(--whitey);
+    width: 40vw;
+    height: 40vh;
+    top: 20%;
+    background-color: var(--whitey);
+    border-radius: 10px;
+    transition: all 0.5s ease-in;
+    align-items: flex-end;
+    justify-content: right;
+    z-index: 3;
+}
+
+.button-box {
+    display: flex;
+    padding: 0.5rem;
+    margin: 0.5rem;
+}

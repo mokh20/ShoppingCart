@@ -1,0 +1,23 @@
+@font-face {
+    font-family: "iransans-light";
+    src: url(IRANSansWeb_Light.eot);
+    src: url(IRANSansWeb_Light.ttf);
+    src: url(IRANSansWeb_Light.woff);
+    src: url(IRANSansWeb_Light.woff2);
+}
+
+@font-face {
+    font-family: "iransans-medium";
+    src: url(IRANSansWeb_Medium.eot);
+    src: url(IRANSansWeb_Medium.ttf);
+    src: url(IRANSansWeb_Medium.woff);
+    src: url(IRANSansWeb_Medium.woff2);
+}
+
+@font-face {
+    font-family: "iransans-bold";
+    src: url(IRANSansWeb_Bold.eot);
+    src: url(IRANSansWeb_Bold.ttf);
+    src: url(IRANSansWeb_Bold.woff);
+    src: url(IRANSansWeb_Bold.woff2);
+}
