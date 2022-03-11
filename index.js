@@ -8,6 +8,7 @@ const backDrop = document.querySelector(".back-drop");
 const clearCart = document.querySelector(".clear-cart");
 const cartTotalProduct = document.querySelector(".total-price");
 const cartNumber = document.querySelector(".cart-number");
+const boxShopItems = document.querySelector(".box-shop-items");
 
 let cart = [];
 // Get Products
@@ -51,24 +52,54 @@ class UI {
                 productBtn.target.innerText = "In Cart";
                 Btn.disabled = true;
                 // get product storage
-                const addedProducts = Storage.getProductsStorage(idBtn);
+                const addedProducts = {
+                    ...Storage.getProductsStorage(idBtn),
+                    quantity: 1,
+                };
                 // add to cart
-                cart = [...cart, {...addedProducts, quantity: 1 }];
+                cart = [...cart, addedProducts];
                 // save to storage
                 Storage.saveToCart(cart);
                 // update cart value
                 this.totalPriceCart(cart);
+                // show item in cart
+                this.displayItemInCart(addedProducts);
             });
         });
     }
     totalPriceCart(cart) {
-        let numberProduct = 0
+        let numberProduct = 0;
         const totalPrice = cart.reduce((acc, curr) => {
             numberProduct += curr.quantity;
-            return acc + curr.quantity * curr.price
+            return acc + curr.quantity * curr.price;
         }, 0);
         cartTotalProduct.innerText = `Total Price : ${totalPrice.toFixed(2)} $`;
-        cartNumber.innerText = numberProduct
+        cartNumber.innerText = numberProduct;
+    }
+    displayItemInCart(product) {
+        const productItem = document.createElement("div");
+        productItem.classList.add("box-shop-product");
+        productItem.innerHTML = ` 
+            <img src="${product.imgUrl}" alt="">
+            <div class="product-description">
+                <span>${product.title}</span>
+                <div class="price "> ${product.price} $</div>
+            </div>
+            <div class="value">
+                <i class="fa fa-angle-up"></i>
+                <span>${product.quantity}</span>
+                <i class="fa fa-angle-down"></i>
+            </div>
+            <i class="fa fa-trash-can"></i>
+        `;
+        boxShopItems.appendChild(productItem);
+    }
+    showItemCartLoaded() {
+        cart = Storage.getCart() || [];
+        cart.forEach((productITem) => {
+            this.displayItemInCart(productITem);
+            this.totalPriceCart(cart);
+        });
     }
 }
 // Storage
@@ -81,7 +112,10 @@ class Storage {
         return productsList.find((product) => product.id === parseInt(id));
     }
     static saveToCart(cart) {
-        localStorage.setItem("Cart", JSON.stringify(cart));
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
+    static getCart() {
+        return JSON.parse(localStorage.getItem("cart"));
     }
 }
 
@@ -90,6 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const products = new Products();
     const productsData = products.getProducts();
     const ui = new UI();
+    ui.showItemCartLoaded();
     ui.displayProducts(productsData);
     ui.addProductToCart();
     Storage.saveStorage(productsData);
