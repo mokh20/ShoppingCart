@@ -32,7 +32,7 @@ class UI {
                     <div class="price">Price :${item.price} $</div>
                     <div class="product-name">${item.title}</div>
                 </div>
-                <button class="button-shop add-product"data-id=${item.id}>add to cart</button>
+                <button class="button-shop add-product"data-id=${item.id}>Add To Cart</button>
             </div>
             `;
             productDOM.innerHTML = productBox;
@@ -93,7 +93,7 @@ class UI {
             <img src="${product.imgUrl}" alt="">
             <div class="product-description">
                 <span>${product.title}</span>
-                <div class="price "> ${product.price} $</div>
+                <div class="price"> ${product.price} $</div>
             </div>
             <div class="value">
                 <i class="fa fa-angle-up" data-id='${product.id}'></i>
@@ -139,7 +139,7 @@ class UI {
         const button = buttons.find(
             (btn) => parseInt(btn.dataset.id) === parseInt(id)
         );
-        button.innerText = "add to cart";
+        button.innerText = "Add To Cart";
         button.disabled = false;
     }
     clearCart() {

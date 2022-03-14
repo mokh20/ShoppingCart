@@ -123,7 +123,10 @@ main h3 {
 
 .product-box img {
     border-radius: 8px;
+    min-width: 300px;
     max-width: 100%;
+    max-height: 200px;
+    object-fit: contain;
 }
 
 .description {
