@@ -152,17 +152,24 @@ main h3 {
 /* box-shop-cart */
 
 .box-shop-cart {
-    visibility: flex;
-    display: none;
+    visibility: hidden;
+    display: flex;
     position: absolute;
     border: 1px solid var(--whitey);
     width: 400px;
     min-height: 200px;
-    top: 20%;
+    top: -100%;
     background-color: var(--whitey);
     border-radius: 10px;
     transition: all 0.5s ease-in;
     z-index: 3;
+}
+
+.box-shop-cart h2 {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    font: 1rem iransans-medium;
 }
 
 .box-shop-product {

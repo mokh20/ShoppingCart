@@ -5,13 +5,14 @@ const productDOM = document.querySelector(".products");
 const shopCartBtn = document.querySelector(".shop-cart");
 const boxShopCart = document.querySelector(".box-shop-cart");
 const backDrop = document.querySelector(".back-drop");
-const clearCart = document.querySelector(".clear-cart");
+const clearCartBtn = document.querySelector(".clear-cart");
 const cartTotalProduct = document.querySelector(".total-price");
 const cartNumber = document.querySelector(".cart-number");
 const boxShopItems = document.querySelector(".box-shop-items");
 
 let cart = [];
-// Get Products
+let buttons = []
+    // Get Products
 class Products {
     getProducts() {
         return productsData;
@@ -37,8 +38,8 @@ class UI {
         });
     }
     addProductToCart() {
-        const productsBtns = document.querySelectorAll(".add-product");
-        const buttons = [...productsBtns];
+        const productsBtns = [...document.querySelectorAll(".add-product")];
+        buttons = productsBtns;
         buttons.forEach((Btn) => {
             const idBtn = Btn.dataset.id;
             const isInCart = cart.find((p) => {
@@ -86,13 +87,14 @@ class UI {
                 <div class="price "> ${product.price} $</div>
             </div>
             <div class="value">
-                <i class="fa fa-angle-up"></i>
+                <i class="fa fa-angle-up" data-id='${product.id}'></i>
                 <span>${product.quantity}</span>
-                <i class="fa fa-angle-down"></i>
+                <i class="fa fa-angle-down" data-id='${product.id}' ></i>
             </div>
-            <i class="fa fa-trash-can"></i>
+            <i class="fa fa-trash-can" data-id='${product.id}'></i>
         `;
         boxShopItems.appendChild(productItem);
+
     }
     showItemCartLoaded() {
         cart = Storage.getCart() || [];
@@ -100,6 +102,38 @@ class UI {
             this.displayItemInCart(productITem);
             this.totalPriceCart(cart);
         });
+    }
+    clearCart() {
+        cartTotalProduct.innerText = `Total Price : 0 $`;
+        boxShopItems.innerHTML = "";
+        cart = []
+        Storage.saveToCart(cart);
+        cartNumber.innerText = '0';
+        buttons.forEach(btn => {
+            btn.innerText = "add to cart";
+            btn.disabled = false;
+        })
+    }
+    inCart() {
+        const inCartItems = Storage.getCart() || [];
+        inCartItems.forEach((product) => {
+            const isInCart = buttons.find((btn) => {
+                return parseInt(btn.dataset.id) === parseInt(product.id);
+            });
+            if (isInCart) {
+                isInCart.innerText = "In Cart";
+                isInCart.disabled = true;
+            }
+        });
+    }
+    removeItem() {
+        const itemList = [...boxShopItems.childNodes];
+        itemList.forEach(product => {
+            const deleteBtn = product.children[3]
+            deleteBtn.addEventListener('click', () => {
+                deleteBtn.parentElement.remove();
+            })
+        })
     }
 }
 // Storage
@@ -127,24 +161,31 @@ document.addEventListener("DOMContentLoaded", () => {
     ui.showItemCartLoaded();
     ui.displayProducts(productsData);
     ui.addProductToCart();
+    ui.inCart();
+    ui.removeItem()
     Storage.saveStorage(productsData);
 });
 
 shopCartBtn.addEventListener("click", showShopCart);
 backDrop.addEventListener("click", closeShopCart);
-clearCart.addEventListener("click", closeShopCart);
+clearCartBtn.addEventListener("click", () => {
+    const ui = new UI();
+    ui.clearCart();
+    closeShopCart()
+});
 
 // Functions
 function showShopCart() {
     boxShopCart.style.display = "grid";
     boxShopCart.style.visibility = "visible";
     backDrop.style.display = "block";
-    backDrop.style.visibility = "visible";
+    boxShopCart.style.top = "5%";
 }
 
 function closeShopCart() {
     boxShopCart.style.display = "none";
     boxShopCart.style.visibility = "hidden";
+    boxShopCart.style.top = "-100%";
     backDrop.style.display = "none";
-    backDrop.style.visibility = "hidden";
 }
+backDrop.style.display = "none";
