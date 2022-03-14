@@ -210,9 +210,14 @@ main h3 {
     margin: .3rem 0;
 }
 
+.value i {
+    cursor: pointer;
+}
+
 .fa-trash-can {
     text-align: center;
     font-size: 1.3rem;
+    cursor: pointer;
 }
 
 .box-shop-description {
