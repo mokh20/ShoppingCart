@@ -41,7 +41,7 @@ export const productsData = [{
         id: 7,
     },
     {
-        title: "ُTelevision",
+        title: "Television",
         price: 175,
         imgUrl: "./img/tv.jpg",
         id: 8,
