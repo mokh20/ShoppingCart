@@ -1,15 +1,17 @@
 import { productsData } from "./products.js";
 
 // DOM
+const header = document.querySelector("header");
 const productDOM = document.querySelector(".products");
+const modeViewBtn = document.querySelector(".mode-view");
 const shopCartBtn = document.querySelector(".shop-cart");
 const cartNumber = document.querySelector(".cart-number");
 const boxShopCart = document.querySelector(".box-shop-cart");
+const boxShopItems = document.querySelector(".box-shop-items");
 const backDrop = document.querySelector(".back-drop");
 const clearCartBtn = document.querySelector(".clear-cart");
 const confirmBtn = document.querySelector(".confirm-cart");
 const cartTotalProduct = document.querySelector(".total-price");
-const boxShopItems = document.querySelector(".box-shop-items");
 
 let cart = [];
 let buttons = [];
@@ -29,8 +31,8 @@ class UI {
             <div class="product-box">
                 <img src="${item.imgUrl}" alt="">
                 <div class="description">
+                <div class="product-name">${item.title}</div>
                     <div class="price">Price :${item.price} $</div>
-                    <div class="product-name">${item.title}</div>
                 </div>
                 <button class="button-shop add-product"data-id=${item.id}>Add To Cart</button>
             </div>
@@ -56,6 +58,8 @@ class UI {
             Btn.addEventListener("click", (productBtn) => {
                 productBtn.target.innerText = "In Cart";
                 Btn.disabled = true;
+                // Btn.style.background = "red";
+                Btn.classList.toggle("btn-seleted");
                 // get product storage
                 const addedProducts = {
                     ...Storage.getProductsStorage(idBtn),
@@ -129,6 +133,8 @@ class UI {
             if (isInCart) {
                 isInCart.innerText = "In Cart";
                 isInCart.disabled = true;
+                // isInCart.style.background = "red";
+                isInCart.classList.toggle("btn-seleted");
             }
         });
     }
@@ -141,7 +147,9 @@ class UI {
         );
         button.innerText = "Add To Cart";
         button.disabled = false;
+        button.classList.toggle("btn-seleted");
     }
+
     clearCart() {
         cart.forEach((item) => this.removeItem(item.id));
         // clear products are in cart | one by one
@@ -149,6 +157,7 @@ class UI {
             boxShopItems.removeChild(boxShopItems.children[0]);
         }
     }
+
     removeItem(id) {
         // selete products not in cart
         cart = cart.filter((item) => item.id !== id);
@@ -160,7 +169,7 @@ class UI {
         this.activeBtnCart(id);
     }
 
-    //cart buttons commands
+    // cart buttons commands
     cartLogic() {
         clearCartBtn.addEventListener("click", () => {
             this.clearCart();
@@ -213,6 +222,36 @@ class UI {
             }
         });
     }
+
+    // create dark mode
+    darkMode() {
+        header.classList.toggle("dark-color");
+        productDOM.parentElement.classList.toggle("low-dark-color");
+        const productItem = [...productDOM.children];
+        productItem.forEach((product) => {
+            product.classList.toggle("dark-product");
+            product.children[2].classList.toggle("dark-btn");
+        });
+        boxShopCart.classList.toggle("dark-color");
+        confirmBtn.classList.toggle("dark-btn");
+        clearCartBtn.classList.toggle("dark-btn");
+    }
+
+    // enable dark | light
+    modeView() {
+        modeViewBtn.innerHTML = `<i class="fa-solid fa-moon"></i>`;
+        this.darkMode();
+
+        modeViewBtn.addEventListener("click", () => {
+            if (modeViewBtn.firstChild.classList.contains("fa-moon")) {
+                modeViewBtn.innerHTML = `<i class="fa fa-sun"></i>`;
+                this.darkMode();
+            } else {
+                modeViewBtn.innerHTML = `<i class="fa-solid fa-moon"></i>`;
+                this.darkMode();
+            }
+        });
+    }
 }
 // Storage
 class Storage {
@@ -241,6 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ui.addProductToCart();
     ui.inCart();
     ui.cartLogic();
+    ui.modeView();
     Storage.saveStorage(productsData);
 });
 
