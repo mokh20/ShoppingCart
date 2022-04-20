@@ -6,6 +6,7 @@
     --green-checked: #078807;
     --slow-blue: #ede9fe;
     --slow-purple: rgb(173, 173, 231);
+    --transparent-color: rgba(0, 0, 0, 0);
 }
 
 body {
@@ -34,11 +35,12 @@ body {
 /* header */
 
 header {
-    display: flex;
-    justify-content: space-around;
+    display: grid;
+    justify-items: center;
     background-color: var(--slow-purple);
     padding: 1rem 0rem;
     align-items: center;
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .shop-cart {
@@ -87,6 +89,67 @@ main {
 
 main h3 {
     padding-top: 1rem;
+}
+
+.search-product {
+    border-radius: 5px;
+}
+
+.search-product input {
+    border-radius: 5px;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0.5rem 0.8rem;
+    background-color: var(--slow-purple);
+    color: var(--whitey)
+}
+
+.search-product input::placeholder {
+    color: var(--purple);
+    opacity: .5;
+}
+
+.dark-search-color input,
+.dark-search-color input::placeholder {
+    background-color: #082544;
+    color: var(--whitey)
+}
+
+.btn-header {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.filter-btn {
+    border: 1px solid var(--slow-purple);
+    background-color: var(--transparent-color);
+    border-radius: 10px;
+    padding: 0.25rem 0.8rem;
+    margin: 0.2rem;
+    color: var(--purple);
+    cursor: pointer;
+}
+
+.filter-btn:hover,
+.filter-btn:focus {
+    background-color: var(--slow-purple);
+    color: var(--whitey);
+}
+
+.dark-filter-color {
+    border: 1px solid #082544;
+    color: var(--whitey);
+}
+
+.dark-filter-color:hover,
+.dark-filter-color:focus {
+    background-color: #1b74ce;
 }
 
 .products {
@@ -161,12 +224,12 @@ main h3 {
     display: grid;
     grid-template-columns: 2.5fr repeat(3, 1fr);
     justify-content: space-around;
-    padding: .5rem 0;
+    padding: 0.5rem 0;
     align-items: center;
 }
 
 .box-shop-product img {
-    margin: 0 .5rem;
+    margin: 0 0.5rem;
     max-width: 100px;
     border-radius: 10px;
 }
@@ -188,11 +251,11 @@ main h3 {
     display: flex;
     flex-direction: column;
     text-align: center;
-    font-size: .7rem;
+    font-size: 0.7rem;
 }
 
 .value span {
-    margin: .3rem 0;
+    margin: 0.3rem 0;
 }
 
 .value i {
@@ -219,12 +282,12 @@ main h3 {
 }
 
 .button-box button {
-    font-size: .75rem;
+    font-size: 0.75rem;
 }
 
 .total-price {
     display: flex;
-    padding: .5rem;
+    padding: 0.5rem;
     margin: 0.5rem;
     font: 0.6rem iransans-medium;
 }
@@ -240,21 +303,20 @@ main h3 {
 
 .low-dark-color {
     background-color: #234e7a;
-    color: var(--whitey)
+    color: var(--whitey);
 }
 
 .dark-product {
     background-color: #082544;
-    font-size: 6rem;
 }
 
 .add-product:hover,
 .btn-seleted {
-    background-color: rgba(0, 0, 0, 0);
-    border: 1px solid #1b74ce
+    background-color: var(--transparent-color);
+    border: 1px solid #1b74ce;
 }
 
-@media screen and (min-width:600px) {
+@media screen and (min-width: 600px) {
     .shop-cart,
     .mode-view {
         font-size: 1.2rem;
@@ -263,6 +325,16 @@ main h3 {
         width: 18px;
         height: 15px;
         font-size: 0.7rem;
+    }
+    .search-product {
+        width: 20rem;
+    }
+    .filter-list {
+        display: flex;
+    }
+    .filter-btn {
+        padding: .5rem 1rem;
+        margin: .5rem;
     }
     .products {
         grid-template-columns: repeat(2, 1fr);
@@ -275,7 +347,7 @@ main h3 {
         max-width: 120px;
     }
     .button-box button {
-        font-size: .8rem;
+        font-size: 0.8rem;
     }
     .total-price {
         font: 0.8rem iransans-medium;
@@ -293,7 +365,7 @@ main h3 {
     }
 }
 
-@media screen and (min-width:900px) {
+@media screen and (min-width: 900px) {
     header {
         display: flex;
         justify-content: space-around;
@@ -308,13 +380,16 @@ main h3 {
     .cart-number {
         width: 20px;
         height: 18px;
-        font-size: .8rem;
+        font-size: 0.8rem;
     }
     nav span,
     nav::after,
     nav::before {
         width: 40px;
         height: 6px;
+    }
+    .search-product input {
+        padding: .8rem;
     }
     .products {
         grid-template-columns: repeat(3, 1fr);

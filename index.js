@@ -12,6 +12,8 @@ const backDrop = document.querySelector(".back-drop");
 const clearCartBtn = document.querySelector(".clear-cart");
 const confirmBtn = document.querySelector(".confirm-cart");
 const cartTotalProduct = document.querySelector(".total-price");
+const searchProducts = document.querySelector('.search-product')
+const filterListBtn = document.querySelector(".filter-list");
 
 let cart = [];
 let buttons = [];
@@ -235,6 +237,12 @@ class UI {
         boxShopCart.classList.toggle("dark-color");
         confirmBtn.classList.toggle("dark-btn");
         clearCartBtn.classList.toggle("dark-btn");
+        searchProducts.classList.toggle("dark-search-color");
+        const filterListItem = [...filterListBtn.children];
+        filterListItem.forEach(btn => {
+            btn.classList.toggle("dark-filter-color");
+
+        })
     }
 
     // enable dark | light
