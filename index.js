@@ -1,8 +1,7 @@
-import { productsData } from "./products.js";
-
 // DOM
+const body = document.querySelector("body");
 const header = document.querySelector("header");
-const productDOM = document.querySelector(".products");
+const productsDOM = document.querySelector(".products");
 const modeViewBtn = document.querySelector(".mode-view");
 const shopCartBtn = document.querySelector(".shop-cart");
 const cartNumber = document.querySelector(".cart-number");
@@ -12,17 +11,17 @@ const backDrop = document.querySelector(".back-drop");
 const clearCartBtn = document.querySelector(".clear-cart");
 const confirmBtn = document.querySelector(".confirm-cart");
 const cartTotalProduct = document.querySelector(".total-price");
-const searchProducts = document.querySelector('.search-product')
+const searchProducts = document.querySelector(".search-product");
+const searchInput = document.querySelector("#search");
 const filterListBtn = document.querySelector(".filter-list");
+const filterBtns = document.querySelectorAll(".filter-btn");
 
+let productsData = [];
 let cart = [];
 let buttons = [];
-// Get Products
-class Products {
-    getProducts() {
-        return productsData;
-    }
-}
+const filters = {
+    searchItems: "",
+};
 
 // Display Products
 class UI {
@@ -39,7 +38,7 @@ class UI {
                 <button class="button-shop add-product"data-id=${item.id}>Add To Cart</button>
             </div>
             `;
-            productDOM.innerHTML = productBox;
+            productsDOM.innerHTML = productBox;
         });
     }
 
@@ -228,8 +227,9 @@ class UI {
     // create dark mode
     darkMode() {
         header.classList.toggle("dark-color");
-        productDOM.parentElement.classList.toggle("low-dark-color");
-        const productItem = [...productDOM.children];
+        productsDOM.parentElement.classList.toggle("low-dark-color");
+        body.classList.toggle("low-dark-color");
+        const productItem = [...productsDOM.children];
         productItem.forEach((product) => {
             product.classList.toggle("dark-product");
             product.children[2].classList.toggle("dark-btn");
@@ -239,10 +239,9 @@ class UI {
         clearCartBtn.classList.toggle("dark-btn");
         searchProducts.classList.toggle("dark-search-color");
         const filterListItem = [...filterListBtn.children];
-        filterListItem.forEach(btn => {
+        filterListItem.forEach((btn) => {
             btn.classList.toggle("dark-filter-color");
-
-        })
+        });
     }
 
     // enable dark | light
@@ -261,6 +260,7 @@ class UI {
         });
     }
 }
+
 // Storage
 class Storage {
     static saveStorage(product) {
@@ -280,23 +280,53 @@ class Storage {
 
 // EventListeners
 document.addEventListener("DOMContentLoaded", () => {
-    const products = new Products();
-    const productsData = products.getProducts();
-    const ui = new UI();
-    ui.showItemCartLoaded();
-    ui.displayProducts(productsData);
-    ui.addProductToCart();
-    ui.inCart();
-    ui.cartLogic();
-    ui.modeView();
-    Storage.saveStorage(productsData);
+    axios
+        .get("http://localhost:3000/productsData")
+        .then((res) => {
+            productsData = res.data;
+            const ui = new UI();
+            ui.showItemCartLoaded();
+            ui.displayProducts(productsData);
+            ui.addProductToCart();
+            ui.inCart();
+            ui.cartLogic();
+            ui.modeView();
+            Storage.saveStorage(productsData);
+        })
+        .catch((err) => console.log(err));
 });
 
 shopCartBtn.addEventListener("click", showShopCart);
 backDrop.addEventListener("click", closeShopCart);
 confirmBtn.addEventListener("click", closeShopCart);
+searchProducts.addEventListener("input", (input) => {
+    filters.searchItems = input.target.value;
+    filterProducts(productsData, filters);
+});
 
 // Functions
+
+// filtered prodcut by search name
+function filterProducts(products, _filters) {
+    const filteredProducts = products.filter((product) => {
+        return product.title
+            .toLowerCase()
+            .includes(_filters.searchItems.toLowerCase());
+    });
+    const productsList = [...productsDOM.children];
+    productsList.forEach((product) => {
+        product.style.display = "none";
+        product.style.visibility = "hidden";
+        const productName = product.children[1].firstElementChild.textContent;
+        filteredProducts.forEach((filter) => {
+            if (filter.title === productName) {
+                product.style.display = "grid";
+                product.style.visibility = "visible";
+            }
+        });
+    });
+}
+
 function showShopCart() {
     boxShopCart.style.display = "grid";
     boxShopCart.style.visibility = "visible";
@@ -311,3 +341,11 @@ function closeShopCart() {
     backDrop.style.display = "none";
 }
 backDrop.style.display = "none";
+// filter product by group
+filterBtns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+        const dataSetFilter = e.target.dataset.filter;
+        filters.searchItems = dataSetFilter;
+        filterProducts(productsData, filters)
+    });
+});
