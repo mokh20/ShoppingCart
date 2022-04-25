@@ -1,4 +1,6 @@
-// DOM
+import { productsData } from "./products.js";
+
+//DOM
 const body = document.querySelector("body");
 const header = document.querySelector("header");
 const productsDOM = document.querySelector(".products");
@@ -12,16 +14,20 @@ const clearCartBtn = document.querySelector(".clear-cart");
 const confirmBtn = document.querySelector(".confirm-cart");
 const cartTotalProduct = document.querySelector(".total-price");
 const searchProducts = document.querySelector(".search-product");
-const searchInput = document.querySelector("#search");
 const filterListBtn = document.querySelector(".filter-list");
 const filterBtns = document.querySelectorAll(".filter-btn");
 
-let productsData = [];
 let cart = [];
 let buttons = [];
 const filters = {
     searchItems: "",
 };
+
+class Products {
+    getProducts() {
+        return productsData;
+    }
+}
 
 // Display Products
 class UI {
@@ -30,7 +36,9 @@ class UI {
         products.forEach((item) => {
             productBox += `
             <div class="product-box">
-                <img src="${item.imgUrl}" alt="">
+                <div class="img-product">
+                    <img src="${item.imgUrl}" alt="">
+                </div>
                 <div class="description">
                 <div class="product-name">${item.title}</div>
                     <div class="price">Price :${item.price} $</div>
@@ -95,7 +103,9 @@ class UI {
         const productItem = document.createElement("div");
         productItem.classList.add("box-shop-product");
         productItem.innerHTML = ` 
-            <img src="${product.imgUrl}" alt="">
+            <div class="img-cart">
+                <img src="${product.imgUrl}" alt="">
+            </div>
             <div class="product-description">
                 <span>${product.title}</span>
                 <div class="price"> ${product.price} $</div>
@@ -280,20 +290,16 @@ class Storage {
 
 // EventListeners
 document.addEventListener("DOMContentLoaded", () => {
-    axios
-        .get("http://localhost:3000/productsData")
-        .then((res) => {
-            productsData = res.data;
-            const ui = new UI();
-            ui.showItemCartLoaded();
-            ui.displayProducts(productsData);
-            ui.addProductToCart();
-            ui.inCart();
-            ui.cartLogic();
-            ui.modeView();
-            Storage.saveStorage(productsData);
-        })
-        .catch((err) => console.log(err));
+    const products = new Products();
+    const productsData = products.getProducts();
+    const ui = new UI();
+    ui.showItemCartLoaded();
+    ui.displayProducts(productsData);
+    ui.addProductToCart();
+    ui.inCart();
+    ui.cartLogic();
+    ui.modeView();
+    Storage.saveStorage(productsData);
 });
 
 shopCartBtn.addEventListener("click", showShopCart);
@@ -346,6 +352,6 @@ filterBtns.forEach((btn) => {
     btn.addEventListener("click", (e) => {
         const dataSetFilter = e.target.dataset.filter;
         filters.searchItems = dataSetFilter;
-        filterProducts(productsData, filters)
+        filterProducts(productsData, filters);
     });
 });
