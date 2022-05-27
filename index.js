@@ -1,8 +1,10 @@
 import { productsData } from "./products.js";
-
+import ProductsView from "./pages/Products.js";
+import AboutUs from "./pages/AboutUs.js"
 //DOM
 const body = document.querySelector("body");
 const header = document.querySelector("header");
+const main = document.querySelector("main");
 const productsDOM = document.querySelector(".products");
 const modeViewBtn = document.querySelector(".mode-view");
 const shopCartBtn = document.querySelector(".shop-cart");
@@ -16,6 +18,10 @@ const cartTotalProduct = document.querySelector(".total-price");
 const searchProducts = document.querySelector(".search-product");
 const filterListBtn = document.querySelector(".filter-list");
 const filterBtns = document.querySelectorAll(".filter-btn");
+// Select Menu Elements From DOM
+const mainMenu = document.querySelector(".main-menu");
+const menuHambuger = document.querySelector(".menu-hamburger");
+const backMenu = document.querySelector(".back-drop-menu");
 
 let cart = [];
 let buttons = [];
@@ -41,7 +47,7 @@ class UI {
                 </div>
                 <div class="description">
                 <div class="product-name">${item.title}</div>
-                    <div class="price">Price :${item.price} $</div>
+                    <div class="price">Price : ${item.price} $</div>
                 </div>
                 <button class="button-shop add-product"data-id=${item.id}>Add To Cart</button>
             </div>
@@ -234,10 +240,11 @@ class UI {
         });
     }
 
-    // create dark mode
+    // create dark mode => Select Elements then dark classes
     darkMode() {
+        mainMenu.classList.toggle("low-dark-color");
         header.classList.toggle("dark-color");
-        productsDOM.parentElement.classList.toggle("low-dark-color");
+        main.classList.toggle("low-dark-color");
         body.classList.toggle("low-dark-color");
         const productItem = [...productsDOM.children];
         productItem.forEach((product) => {
@@ -256,15 +263,14 @@ class UI {
 
     // enable dark | light
     modeView() {
-        modeViewBtn.innerHTML = `<i class="fa-solid fa-moon"></i>`;
+        modeViewBtn.innerHTML = `<p><i class="fa fa-moon"></i><b>Dark Mode</b></p>`;
         this.darkMode();
-
         modeViewBtn.addEventListener("click", () => {
-            if (modeViewBtn.firstChild.classList.contains("fa-moon")) {
-                modeViewBtn.innerHTML = `<i class="fa fa-sun"></i>`;
+            if (modeViewBtn.firstChild.firstChild.classList.contains("fa-moon")) {
+                modeViewBtn.innerHTML = `<p><i class="fa fa-sun"></i><b>Light Mode</b></p>`;
                 this.darkMode();
             } else {
-                modeViewBtn.innerHTML = `<i class="fa-solid fa-moon"></i>`;
+                modeViewBtn.innerHTML = `<p><i class="fa fa-moon"></i><b>Dark Mode</b></p>`;
                 this.darkMode();
             }
         });
@@ -290,6 +296,8 @@ class Storage {
 
 // EventListeners
 document.addEventListener("DOMContentLoaded", () => {
+    route()
+    pageView()
     const products = new Products();
     const productsData = products.getProducts();
     const ui = new UI();
@@ -308,6 +316,15 @@ confirmBtn.addEventListener("click", closeShopCart);
 searchProducts.addEventListener("input", (input) => {
     filters.searchItems = input.target.value;
     filterProducts(productsData, filters);
+});
+
+// filter product by group
+filterBtns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+        const dataSetFilter = e.target.dataset.filter;
+        filters.searchItems = dataSetFilter;
+        filterProducts(productsData, filters);
+    });
 });
 
 // Functions
@@ -332,7 +349,7 @@ function filterProducts(products, _filters) {
         });
     });
 }
-
+// Show | Close => ShopCart
 function showShopCart() {
     boxShopCart.style.display = "grid";
     boxShopCart.style.visibility = "visible";
@@ -346,12 +363,70 @@ function closeShopCart() {
     boxShopCart.style.top = "-100%";
     backDrop.style.display = "none";
 }
-backDrop.style.display = "none";
-// filter product by group
-filterBtns.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-        const dataSetFilter = e.target.dataset.filter;
-        filters.searchItems = dataSetFilter;
-        filterProducts(productsData, filters);
-    });
+
+// Menu => Open | Close
+menuHambuger.addEventListener("click", () => {
+    showMenu();
+    mainMenu.classList.remove("hide");
 });
+backMenu.addEventListener("click", () => {
+    showMenu();
+    backMenu.style.display = "none";
+    mainMenu.classList.remove("show");
+    // Hidden Menu
+    mainMenu.classList.toggle("hide");
+});
+
+function showMenu() {
+    // Style MenuIcon
+    menuHambuger.children[0].classList.toggle("menu-opened-right");
+    menuHambuger.children[1].classList.toggle("menu-opened-left");
+    menuHambuger.children[2].classList.toggle("hide");
+    backMenu.style.display = "block";
+    // Show Menu
+    mainMenu.classList.toggle("show");
+}
+
+
+// Create Routes
+const routes = [
+    { path: "/", view: () => {} },
+    { path: "/index.html", view: () => {} },
+    { path: "/Products", view: ProductsView },
+    { path: "/AboutUs", view: AboutUs },
+];
+
+function route() {
+    const routeList = routes.map(route => {
+        return {
+            route,
+            isMatch: location.pathname === route.path
+        };
+    })
+    let match = routeList.find(route => {
+        return route.isMatch
+    })
+    if (!match) {
+        match = {
+            route: { path: "/Not-found", view: console.log("hi") },
+            isMatch: true
+        };
+    }
+    // if (match.route.path === "/") {}
+    // main.innerHTML = match.route.view();
+}
+
+function navigation(url) {
+    history.pushState(null, null, url)
+    route();
+}
+
+function pageView() {
+    mainMenu.addEventListener('click', (e) => {
+        e.preventDefault()
+        if (e.target.matches("[data-link]")) {
+            navigation(e.target.href);
+        }
+    })
+    route()
+}

@@ -14,10 +14,17 @@ body {
     z-index: 1;
 }
 
+a,
+a:focus {
+    color: inherit;
+    text-decoration: none;
+}
+
 
 /* backGround shopCart */
 
-.back-drop {
+.back-drop,
+.back-drop-menu {
     display: none;
     z-index: 0;
     width: 100%;
@@ -39,6 +46,7 @@ header {
     padding: 1rem 0rem;
     align-items: center;
     grid-template-columns: repeat(3, 1fr);
+    direction: rtl;
 }
 
 .shop-cart {
@@ -62,7 +70,108 @@ header {
     font-size: 0.6rem;
 }
 
-nav {
+
+/* MenuHamburger */
+
+.menu-hamburger {
+    position: relative;
+    display: grid;
+    cursor: pointer;
+    margin: 0 1rem;
+    z-index: 1;
+}
+
+.menu-hamburger span {
+    background-color: var(--whitey);
+    width: 25px;
+    height: 3px;
+    border-radius: 1.5rem;
+    position: absolute;
+}
+
+.menu-opened-right {
+    transform: rotate(-45deg) translateX(-3px);
+}
+
+.menu-opened-left {
+    transform: rotate(45deg) translateX(5px) translateY(8px);
+}
+
+.menu-hamburger span {
+    transition: all 0.5s ease-in-out;
+}
+
+.menu-hamburger span:nth-child(2) {
+    bottom: 4px;
+}
+
+.menu-hamburger span:last-child {
+    top: 7px;
+}
+
+
+/* Menu */
+
+.main-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    border-radius: 0 0 1.5rem;
+    width: 200px;
+    height: 100%;
+    background-color: var(--slow-blue);
+    color: var(--purple);
+    visibility: hidden;
+    z-index: 2;
+}
+
+.nav-items {
+    display: grid;
+    height: 100%;
+    align-content: start;
+    margin-top: 1rem;
+}
+
+.nav-item {
+    padding: 0.8rem;
+    white-space: nowrap;
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.nav-item .fa {
+    margin: 0.5rem 1rem;
+}
+
+.hide {
+    visibility: hidden;
+    transition: all 0.5s ease-in-out;
+    animation: hide-box 0.5s ease-in-out;
+}
+
+.show {
+    visibility: visible;
+    animation: show-box 0.5s ease-in-out;
+}
+
+@keyframes show-box {
+    0% {
+        opacity: 0;
+        width: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes hide-box {
+    100% {
+        opacity: 0;
+        width: 0;
+    }
+}
+
+.nav-item:first-child {
     position: relative;
 }
 
@@ -327,8 +436,7 @@ main h3 {
 }
 
 @media screen and (min-width: 600px) {
-    .shop-cart,
-    .mode-view {
+    .shop-cart {
         font-size: 1.2rem;
     }
     .cart-number {
@@ -398,8 +506,7 @@ main h3 {
         padding: 1rem 8rem;
         align-items: center;
     }
-    .shop-cart,
-    .mode-view {
+    .shop-cart {
         font-size: 1.5rem;
     }
     .cart-number {
@@ -434,6 +541,48 @@ main h3 {
     }
     .box-shop-product {
         border: 1px solid rgba(206, 206, 206, 0.377);
+    }
+}
+
+@media screen and (min-width: 1050px) {
+    header {
+        padding: 1rem;
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+    }
+    .title-header {
+        display: none;
+        visibility: hidden;
+    }
+    .menu-hamburger {
+        display: none;
+    }
+    .main-menu {
+        display: flex;
+        visibility: visible;
+        position: relative;
+        width: 0;
+        background-color: inherit;
+        justify-content: flex-end;
+    }
+    .nav-items {
+        display: flex;
+        margin-top: 0;
+    }
+    .nav-item {
+        font-size: .9rem;
+        color: var(--whitey)
+    }
+    .nav-item:first-child .fa {
+        font-size: 1.5rem;
+    }
+    .nav-item:first-child {
+        position: absolute;
+        right: 40vw;
+        bottom: -2px;
+    }
+    .mode-view b {
+        display: none;
     }
 }
 
